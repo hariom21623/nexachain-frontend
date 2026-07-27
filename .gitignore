@@ -1,0 +1,21 @@
+# Environment variables (sensitive data)
+.env
+
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Debug logs
+npm-debug.log*
+
+
+# Build outputs
+dist/
+build/
+.next/
+
+# OS / Editor files
+.DS_Store
+.idea/
+.vscode/
