@@ -1,18 +1,28 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, TrendingUp, Users, History, LogOut } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Users, History, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
     const location = useLocation();
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
+    const isAdmin = (user?.role || '').toLowerCase() === 'admin';
 
-    const menuItems = [
+    // Admin and User Menu Items
+    const userMenuItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { name: 'Investments', path: '/investments', icon: TrendingUp },
         { name: 'Referral Team', path: '/referrals', icon: Users },
         { name: 'Transactions', path: '/transactions', icon: History },
     ];
+
+    const adminMenuItems = [
+        { name: 'Admin Overview', path: '/admin/dashboard', icon: Shield },
+        { name: 'User Management', path: '/referrals', icon: Users },
+        { name: 'All Transactions', path: '/transactions', icon: History },
+    ];
+
+    const menuItems = isAdmin ? adminMenuItems : userMenuItems;
 
     return (
         <div className="w-64 bg-slate-800 border-r border-slate-700 min-h-screen flex flex-col justify-between p-4">
@@ -30,7 +40,7 @@ const Sidebar = () => {
                                 key={item.path}
                                 to={item.path}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive
-                                        ? 'bg-emerald-600 text-white'
+                                        ? isAdmin ? 'bg-amber-600 text-white' : 'bg-emerald-600 text-white'
                                         : 'text-slate-400 hover:bg-slate-700 hover:text-slate-100'
                                     }`}
                             >

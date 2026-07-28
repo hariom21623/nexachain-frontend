@@ -18,10 +18,21 @@ const Login = () => {
 
         try {
             const response = await API.post('/auth/login', formData);
-            const { token, user } = response.data;
+            // Supporting both response structures (nested under data or direct)
+            const resData = response.data.data || response.data;
+            const { token, user } = resData;
 
             login(user, token);
-            navigate('/dashboard');
+
+            // Role-Based Navigation Logic
+            // handleSubmit function ke andar:
+            const userRole = (user?.role || '').toLowerCase();
+
+            if (userRole === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Check credentials.');
         } finally {

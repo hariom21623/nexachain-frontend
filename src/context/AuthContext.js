@@ -8,20 +8,26 @@ export const AuthProvider = ({ children }) => {
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
-    const login = (userData, token) => {
-        localStorage.setItem('nexa_token', token);
+    const [token, setToken] = useState(() => {
+        return localStorage.getItem('nexa_token') || null;
+    });
+
+    const login = (userData, userToken) => {
+        localStorage.setItem('nexa_token', userToken);
         localStorage.setItem('nexa_user', JSON.stringify(userData));
+        setToken(userToken);
         setUser(userData);
     };
 
     const logout = () => {
         localStorage.removeItem('nexa_token');
         localStorage.removeItem('nexa_user');
+        setToken(null);
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
